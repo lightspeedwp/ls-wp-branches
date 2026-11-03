@@ -7,13 +7,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ## [Unreleased]
 
 ### Added
-- (In development)
+- `scripts/__tests__/validate-branch-name.test.cjs`: `node:test` checks that the bundled validator gives the answers SKILL.md documents. No npm install is needed.
 
 ### Changed
-- (In development)
+- SKILL.md now applies the org rules in `lightspeedwp/.github` instead of its own. The `block-` scope is an optional convention, not a requirement.
+- SKILL.md runs the repository's own validator when it has one, otherwise the bundled one through `${CLAUDE_SKILL_DIR}`, so it works from any directory.
+- The seven nested sub-skills are now reference files in `references/`. Claude Code does not load nested skills, so they were unreachable.
+- `scripts/sync-canonical.sh` now also syncs the validator.
+- `npm test` uses `node:test` instead of Jest.
 
 ### Fixed
-- (In development)
+- The bundled validator rejected `release/v1.0.0` and accepted `master`, `staging` and double hyphens. It is now an unmodified copy of the canonical `validate-branch-name.cjs`.
+- SKILL.md no longer says CI checks, auto-labelling or WordPress.org deployment run automatically. It tells Claude to check the repository's workflows first.
+- `sync-canonical.sh` wrote a literal `$(date ...)` into `CANONICAL_FILES.md` instead of the sync date.
+- `lefthook.yml` ran branch validation as a commit-msg hook and called an `npm run format` script that did not exist.
+
+### Removed
+- `scripts/validate-branch-name.js`, its Jest test and `jest.config.js`.
+- `security-html-block-xss-guidance.md` from the root; it is an eval output and now lives in `evals/comprehensive-coverage/results/security-html-block-xss/with_skill/outputs/`.
 
 ## [1.0.0] - 2026-10-30
 

@@ -1,9 +1,3 @@
----
-name: branch-validation-wordpress-testing
-description: WordPress block testing strategy for Jest unit tests, PHPUnit integration tests, Playwright E2E tests, and WCAG 2.2 AAA accessibility. Use this skill when setting up block testing infrastructure, configuring test runners, creating test cases by block type (interactive, display, container), implementing accessibility testing, or achieving >85% coverage requirements.
-compatibility: Jest 29+, Playwright 1.40+, PHPUnit 9+, axe-core, WordPress 5.0+
----
-
 # WordPress Block Testing Strategy Skill
 
 Comprehensive testing guidance for WordPress blocks with Jest, PHPUnit, Playwright, and accessibility validation.
@@ -353,6 +347,6 @@ npm run lint
 ## Support
 
 For branch strategy → Use main `branch-validation-wordpress` skill
-For theme-specific testing → Use `branch-validation-wordpress-themes` skill
-For plugin-specific testing → Use `branch-validation-wordpress-plugins` skill
-For release testing → Use `branch-validation-wordpress-release` skill
+For theme-specific testing → Use [references/themes.md](themes.md)
+For plugin-specific testing → Use [references/plugins.md](plugins.md)
+For release testing → Use [references/release.md](release.md)

@@ -1,9 +1,3 @@
----
-name: branch-validation-wordpress-accessibility
-description: WCAG 2.2 AAA accessibility guidance for WordPress blocks. Use this for keyboard navigation, screen reader optimization, color contrast compliance, testing accessibility, or conducting a11y audits. Covers ARIA implementation, keyboard patterns, focus management, screen reader testing, color contrast requirements, and complete accessibility testing workflows for different block types.
-compatibility: WordPress 5.0+, WCAG 2.2 AAA, React/JSX
----
-
 # WordPress Block Accessibility (WCAG 2.2 AAA)
 
 Accessibility best practices, ARIA implementation, keyboard navigation, and testing workflows for inclusive WordPress blocks.

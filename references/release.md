@@ -1,9 +1,3 @@
----
-name: branch-validation-wordpress-release
-description: WordPress block release management covering semantic versioning, multi-block coordination, changelog management, and WordPress.org deployment. Use this skill when planning block releases, coordinating version bumps across multiple blocks, managing breaking changes and deprecations, creating release notes, or deploying blocks to WordPress.org.
-compatibility: WordPress 5.0+, semantic versioning, changelog.md, WordPress.org SVN
----
-
 # WordPress Block Release Management Skill
 
 Comprehensive guidance for planning, coordinating, and executing block releases.
@@ -401,6 +395,6 @@ Plan releases around:
 ## Support
 
 For branch strategy → Use main `branch-validation-wordpress` skill
-For theme releases → Use `branch-validation-wordpress-themes` skill
-For plugin releases → Use `branch-validation-wordpress-plugins` skill
-For testing before release → Use `branch-validation-wordpress-testing` skill
+For theme releases → Use [references/themes.md](themes.md)
+For plugin releases → Use [references/plugins.md](plugins.md)
+For testing before release → Use [references/testing.md](testing.md)

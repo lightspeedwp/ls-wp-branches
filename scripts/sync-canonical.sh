@@ -15,17 +15,19 @@ GITHUB_RAW="https://raw.githubusercontent.com/lightspeedwp/.github/$GITHUB_BRANC
 
 echo "🔄 Syncing canonical files from lightspeedwp/.github ($GITHUB_BRANCH)..."
 
-# Files to sync
+# Files to sync, as "source path in lightspeedwp/.github:destination in this skill"
 declare -a FILES=(
-    ".github/branch-types.yml"
-    ".github/branch-labels.yml"
+    ".github/branch-types.yml:references/branch-types.yml"
+    ".github/branch-labels.yml:references/branch-labels.yml"
+    "scripts/validation/validate-branch-name.cjs:scripts/validate-branch-name.cjs"
 )
 
 # Fetch each file
-for file in "${FILES[@]}"; do
+for entry in "${FILES[@]}"; do
+    file="${entry%%:*}"
+    output="$REPO_ROOT/${entry#*:}"
     filename=$(basename "$file")
     url="$GITHUB_RAW/$file"
-    output="$REFS_DIR/$filename"
 
     echo "  📥 Syncing $filename..."
     if curl -s -f "$url" -o "$output"; then
@@ -36,11 +38,14 @@ for file in "${FILES[@]}"; do
     fi
 done
 
-# Create/update CANONICAL_FILES.md
-cat > "$REFS_DIR/CANONICAL_FILES.md" << 'EOF'
-# Canonical Files Reference
-
-Last synced: $(date -u +'%Y-%m-%dT%H:%M:%SZ')
+# Create/update CANONICAL_FILES.md. The date is written outside the quoted
+# heredoc, because a quoted heredoc does not expand $(date).
+{
+    echo "# Canonical Files Reference"
+    echo ""
+    echo "Last synced: $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+} > "$REFS_DIR/CANONICAL_FILES.md"
+cat >> "$REFS_DIR/CANONICAL_FILES.md" << 'EOF'
 
 These files are reference copies of canonical configuration from [lightspeedwp/.github](https://github.com/lightspeedwp/.github/tree/develop/.github).
 
@@ -50,17 +55,18 @@ These files are reference copies of canonical configuration from [lightspeedwp/.
 2. Run `./scripts/sync-canonical.sh` to pull the latest versions
 3. Commit the updated reference files
 
-## Files in This Directory
+## Synced Files
 
 - **branch-types.yml** — All 38 branch types and their routing (PR templates, labels)
 - **branch-labels.yml** — Type-to-label mapping and area keywords
+- **scripts/validate-branch-name.cjs** — The branch-name validator this skill runs
 
 ## Sync Instructions
 
 ```bash
 cd branch-validation
 ./scripts/sync-canonical.sh
-git add references/
+git add references/ scripts/validate-branch-name.cjs
 git commit -m "chore: sync canonical files from .github"
 git push
 ```
@@ -76,8 +82,8 @@ echo ""
 echo "✅ Canonical files synced successfully!"
 echo ""
 echo "📋 Next steps:"
-echo "  1. Review changes: git diff references/"
-echo "  2. Commit: git add references/ && git commit -m 'chore: sync canonical files from .github'"
+echo "  1. Review changes: git diff references/ scripts/validate-branch-name.cjs"
+echo "  2. Commit: git add references/ scripts/validate-branch-name.cjs && git commit -m 'chore: sync canonical files from .github'"
 echo "  3. Push: git push"
 echo ""
 echo "If this is the first sync or there were significant changes, you may also need to:"

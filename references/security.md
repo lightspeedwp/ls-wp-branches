@@ -1,9 +1,3 @@
----
-name: branch-validation-wordpress-security
-description: Security review and hardening guidance for WordPress blocks. Use this when implementing blocks with user input, sanitizing data, checking permissions, preventing XSS vulnerabilities, validating API responses, escaping output, or conducting security audits. Covers XSS prevention, sanitization, permissions, data validation, escaping, and complete security checklists for different block types.
-compatibility: WordPress 5.0+, PHP, JavaScript/React
----
-
 # WordPress Block Security
 
 Security hardening patterns, vulnerability prevention, and security audit guidance for WordPress blocks.

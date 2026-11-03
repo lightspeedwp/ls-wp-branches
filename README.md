@@ -130,18 +130,17 @@ branch-validation-wordpress/
 │   ├── WORDPRESS_BLOCK_THEME_GUIDE.md            # Theme development guide
 │   └── WORDPRESS_BLOCK_PLUGIN_GUIDE.md           # Plugin development guide
 │
-├── skills/                           # Sub-skills (specialized contexts)
-│   ├── branch-validation-wordpress-themes.md      # Theme-specific patterns
-│   ├── branch-validation-wordpress-plugins.md     # Plugin-specific patterns
-│   ├── branch-validation-wordpress-architecture.md # Component design
-│   ├── branch-validation-wordpress-security.md    # Security hardening
-│   ├── branch-validation-wordpress-accessibility.md # WCAG 2.2 AAA
-│   ├── branch-validation-wordpress-testing.md     # Testing strategies
-│   └── branch-validation-wordpress-release.md     # Release management
-│
-├── references/                       # Reference materials
-│   ├── LIGHTSPEED_INTEGRATION.md     # Canonical LightSpeed strategy mapping
-│   └── (Additional reference docs from lightspeedwp/.github)
+├── references/                       # Loaded by SKILL.md when needed
+│   ├── themes.md                     # Theme-specific patterns
+│   ├── plugins.md                    # Plugin-specific patterns
+│   ├── architecture.md               # Component design
+│   ├── security.md                   # Security hardening
+│   ├── accessibility.md              # WCAG 2.2
+│   ├── testing.md                    # Testing strategies
+│   ├── release.md                    # Release management
+│   ├── branch-types.yml              # Synced from lightspeedwp/.github
+│   ├── branch-labels.yml             # Synced from lightspeedwp/.github
+│   └── LIGHTSPEED_INTEGRATION.md     # Canonical LightSpeed strategy mapping
 │
 ├── prompts/                          # LLM prompts for validation
 │   ├── validate-wordpress-block-branch.md         # Branch validation prompt
@@ -151,8 +150,9 @@ branch-validation-wordpress/
 │   └── README.md                     # Asset documentation
 │
 ├── scripts/                          # Validation and automation scripts
-│   ├── validate-branch-name.js       # Branch name validation
-│   └── (Additional scripts)
+│   ├── validate-branch-name.cjs      # Synced from lightspeedwp/.github; do not edit
+│   ├── sync-canonical.sh             # Refreshes the synced files
+│   └── __tests__/                    # node:test checks of the SKILL.md examples
 │
 └── tests/                            # Test suites
     └── (BATS integration tests)
@@ -242,11 +242,11 @@ branch-validation-wordpress/
 | Block development workflow | [docs/BRANCHING_STRATEGY_WORDPRESS_BLOCKS.md](docs/BRANCHING_STRATEGY_WORDPRESS_BLOCKS.md) | Step-by-step guide |
 | Theme block development | [docs/WORDPRESS_BLOCK_THEME_GUIDE.md](docs/WORDPRESS_BLOCK_THEME_GUIDE.md) | Theme-specific patterns |
 | Plugin block development | [docs/WORDPRESS_BLOCK_PLUGIN_GUIDE.md](docs/WORDPRESS_BLOCK_PLUGIN_GUIDE.md) | Plugin-specific patterns |
-| Architecture & component design | [skills/branch-validation-wordpress-architecture.md](skills/branch-validation-wordpress-architecture.md) | Component patterns, hooks |
-| Security hardening | [skills/branch-validation-wordpress-security.md](skills/branch-validation-wordpress-security.md) | XSS, validation, audit |
-| Accessibility (WCAG AAA) | [skills/branch-validation-wordpress-accessibility.md](skills/branch-validation-wordpress-accessibility.md) | Keyboard nav, screen readers |
-| Testing strategies | [skills/branch-validation-wordpress-testing.md](skills/branch-validation-wordpress-testing.md) | Jest, Playwright, a11y |
-| Release management | [skills/branch-validation-wordpress-release.md](skills/branch-validation-wordpress-release.md) | Versioning, deployment |
+| Architecture & component design | [references/architecture.md](references/architecture.md) | Component patterns, hooks |
+| Security hardening | [references/security.md](references/security.md) | XSS, validation, audit |
+| Accessibility (WCAG AAA) | [references/accessibility.md](references/accessibility.md) | Keyboard nav, screen readers |
+| Testing strategies | [references/testing.md](references/testing.md) | Jest, Playwright, a11y |
+| Release management | [references/release.md](references/release.md) | Versioning, deployment |
 
 **Reference & Integration:**
 | Need | Read | Purpose |

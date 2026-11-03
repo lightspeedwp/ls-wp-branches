@@ -110,7 +110,12 @@ teardown() {
 
 # Test: Script loops over files
 @test "sync-canonical.sh has for loop for FILES" {
-  grep -q 'for file in "${FILES\[@\]}"' "$REPO_ROOT/scripts/sync-canonical.sh"
+  grep -q 'for entry in "${FILES\[@\]}"' "$REPO_ROOT/scripts/sync-canonical.sh"
+}
+
+# Test: Script syncs the validator as well as the reference files
+@test "sync-canonical.sh syncs the branch-name validator" {
+  grep -q "scripts/validation/validate-branch-name.cjs:scripts/validate-branch-name.cjs" "$REPO_ROOT/scripts/sync-canonical.sh"
 }
 
 # Test: Script uses basename
