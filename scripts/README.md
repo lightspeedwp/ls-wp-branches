@@ -1,134 +1,21 @@
-# Scripts Directory
+# Scripts
 
-Executable validation and automation scripts for branch-validation-wordpress skill.
+This skill's tooling is TypeScript, run with [`tsx`](https://tsx.is/). Tests live in `__tests__/` beside the scripts and run on [Vitest](https://vitest.dev/) with an enforced 80% coverage threshold. No shell scripts.
 
-## Scripts
+| File | Purpose | Run with |
+| --- | --- | --- |
+| `validate-branch-name.cjs` | The org branch-name validator. Unmodified copy from `lightspeedwp/.github`; do not edit here. | `node scripts/validate-branch-name.cjs --branch <name>` |
+| `sync-canonical.ts` | Refreshes the validator and `references/branch-*.yml` from `lightspeedwp/.github`. Downloads everything first and writes nothing if any download fails or is empty. | `npm run sync` |
+| `sync-canonical.ts --check` | Reports drift from `lightspeedwp/.github` without writing. Exits `1` when a file differs. | `npm run sync:check` |
+| `__tests__/` | Vitest suites for both scripts. | `npm test` |
 
-### Branch Validation
-- **validate-branch-name.js** — Validates branch names against WordPress block conventions
-  - Pattern: `{type}/block-{name}-{feature}`
-  - Usage: `node scripts/validate-branch-name.js [--branch <name>]`
-  - Exit codes: 0 (valid), 1 (invalid), 2 (error)
+## Validator exit codes
 
-### Configuration & Setup
-- **setup-hooks.sh** — Installs git hooks using Lefthook
-  - Installs pre-commit, pre-push, commit-msg hooks
-  - Configures branch validation automation
-  - Usage: `bash scripts/setup-hooks.sh`
+`0` valid, `1` invalid or no branch detected. Input precedence: a positional name or `--branch`, then `BRANCH_NAME`, `GITHUB_HEAD_REF` and `GITHUB_REF_NAME`, then the current Git branch.
 
-- **sync-canonical.sh** — Syncs canonical files from lightspeedwp/.github
-  - Updates branch-types.yml, branch-labels.yml
-  - Creates CANONICAL_FILES.md reference
-  - Usage: `bash scripts/sync-canonical.sh`
+## Sync options
 
-### Testing
-- **validate-all.sh** — Runs complete validation suite
-  - Linting, formatting, tests, branch validation
-  - Usage: `bash scripts/validate-all.sh`
+- `--check`: compare only, write nothing.
+- `--ref <git-ref>`: sync from a ref other than `develop`.
 
-- **test-coverage.sh** — Checks Jest coverage >85%
-  - Validates coverage thresholds
-  - Generates coverage reports
-  - Usage: `bash scripts/test-coverage.sh`
-
-## Usage
-
-### Running Scripts
-
-```bash
-# Validate branch name
-node scripts/validate-branch-name.js --branch feat/block-hero-parallax
-
-# Setup hooks
-npm run setup:hooks
-
-# Sync canonical files
-npm run sync:canonical
-
-# Run full validation
-npm run validate
-
-# Check test coverage
-npm run test:coverage
-```
-
-### Installation
-
-Scripts require:
-- Node.js 16+ (for JavaScript scripts)
-- Bash 4+ (for shell scripts)
-- npm or yarn (for npm scripts)
-
-Install dependencies:
-```bash
-npm install
-```
-
-## Development
-
-When adding new scripts:
-
-1. Place in this directory
-2. Add executable permission: `chmod +x script-name.sh`
-3. Include header comment with purpose
-4. Add usage instructions to this README
-5. Add npm script to package.json
-6. Include in CI/CD workflows
-
-## Hook Scripts
-
-Branch validation is automated via Lefthook:
-
-```yaml
-# lefthook.yml
-pre-push:
-  validate-branch:
-    run: node scripts/validate-branch-name.js --branch "$(git rev-parse --abbrev-ref HEAD)"
-```
-
-See [lefthook.yml](../lefthook.yml) for complete hook configuration.
-
-## Testing Scripts
-
-Jest and Playwright tests use helper scripts:
-
-- Unit tests: `npm run test`
-- E2E tests: `npm run test:e2e`
-- A11y tests: `npm run test:a11y`
-- Coverage: `npm run test -- --coverage`
-
-## Troubleshooting
-
-### Branch validation fails
-```bash
-# Debug branch name
-git rev-parse --abbrev-ref HEAD
-
-# Validate format
-node scripts/validate-branch-name.js --branch "your-branch-name"
-```
-
-### Hooks not running
-```bash
-# Reinstall hooks
-npx lefthook install
-
-# Check hook status
-npx lefthook list
-```
-
-### Tests failing
-```bash
-# Run with verbose output
-npm run test -- --verbose
-
-# Run specific test
-npm run test -- blocks/carousel/
-```
-
----
-
-See also:
-- [../lefthook.yml](../lefthook.yml) — Git hooks configuration
-- [../package.json](../package.json) — npm scripts
-- [../SKILL.md](../SKILL.md) — Main skill documentation
+After a sync, review `git diff references/ scripts/validate-branch-name.cjs` and `references/CANONICAL_FILES.md` before committing.

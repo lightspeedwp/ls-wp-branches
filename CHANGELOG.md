@@ -7,23 +7,33 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ## [Unreleased]
 
 ### Added
-- `scripts/__tests__/validate-branch-name.test.cjs`: `node:test` checks that the bundled validator gives the answers SKILL.md documents. No npm install is needed.
+- `scripts/__tests__/validate-branch-name.test.ts`: Vitest checks that the bundled validator gives the answers SKILL.md documents, including input precedence (`--branch`, then `BRANCH_NAME`, then Git) against a throwaway repository.
+- `scripts/__tests__/sync-canonical.test.ts`: Vitest tests for the sync script with a stubbed fetcher, so no test touches the network.
+- `npm run sync:check`: reports drift from `lightspeedwp/.github` without writing anything, and exits `1` if a file differs.
+- `npm run typecheck`, `tsconfig.json` and `vitest.config.ts`, which enforces at least 80% statements, branches, functions and lines.
+- `agents/branch-validation.md`: an agent role that preloads this skill. Install it to `~/.claude/agents/` (see `agents/README.md`).
+- A task routing table in SKILL.md.
 
 ### Changed
 - SKILL.md now applies the org rules in `lightspeedwp/.github` instead of its own. The `block-` scope is an optional convention, not a requirement.
 - SKILL.md runs the repository's own validator when it has one, otherwise the bundled one through `${CLAUDE_SKILL_DIR}`, so it works from any directory.
 - The seven nested sub-skills are now reference files in `references/`. Claude Code does not load nested skills, so they were unreachable.
-- `scripts/sync-canonical.sh` now also syncs the validator.
-- `npm test` uses `node:test` instead of Jest.
+- The canonical sync is now `scripts/sync-canonical.ts` (TypeScript, run with `npm run sync`). It also syncs the validator.
+- `npm test` runs Vitest with coverage instead of Jest. Node 22.12 or later is required.
+- The package is an ES module (`"type": "module"`). The synced validator stays CommonJS (`.cjs`).
 
 ### Fixed
 - The bundled validator rejected `release/v1.0.0` and accepted `master`, `staging` and double hyphens. It is now an unmodified copy of the canonical `validate-branch-name.cjs`.
 - SKILL.md no longer says CI checks, auto-labelling or WordPress.org deployment run automatically. It tells Claude to check the repository's workflows first.
-- `sync-canonical.sh` wrote a literal `$(date ...)` into `CANONICAL_FILES.md` instead of the sync date.
+- The sync wrote a literal `$(date ...)` into `CANONICAL_FILES.md` instead of the sync date.
+- A failed or empty download during sync could leave a mix of old and new canonical files. The sync now downloads and stages every file before replacing any of them.
+- `CLAUDE.md` and `AGENTS.md` pointed at the old `lightspeedwp/branch-validation` repository and at agent files that did not exist.
 - `lefthook.yml` ran branch validation as a commit-msg hook and called an `npm run format` script that did not exist.
 
 ### Removed
 - `scripts/validate-branch-name.js`, its Jest test and `jest.config.js`.
+- `scripts/sync-canonical.sh`, the BATS suites in `tests/` and the `test:bats` and `test:all` scripts. LightSpeed agent tooling is TypeScript only.
+- The skill-local `.claude/` folder. Claude Code ignores it, and it held stale commands and repository URLs.
 - `security-html-block-xss-guidance.md` from the root; it is an eval output and now lives in `evals/comprehensive-coverage/results/security-html-block-xss/with_skill/outputs/`.
 
 ## [1.0.0] - 2026-10-30

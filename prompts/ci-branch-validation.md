@@ -312,7 +312,7 @@ gh run list --workflow=validate-branch.yml --limit=10
 **Local validation passes but CI fails**
 - Local and CI may have different type lists
 - Pull latest `.github/branch-types.yml`
-- Sync canonical files: `./scripts/sync-canonical.sh`
+- Sync canonical files: `npm run sync`
 
 **Want to override validation**
 - Contact team lead or repo maintainer

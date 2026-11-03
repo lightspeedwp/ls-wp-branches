@@ -99,4 +99,4 @@ Prompts are used by:
 See also:
 - [../SKILL.md](../SKILL.md) — Main skill documentation
 - [../docs/](../docs/) — Full documentation
-- [../scripts/validate-branch-name.js](../scripts/validate-branch-name.js) — Validation script
+- [../scripts/validate-branch-name.cjs](../scripts/validate-branch-name.cjs) — Validation script

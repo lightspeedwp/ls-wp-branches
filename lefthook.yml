@@ -5,5 +5,7 @@ pre-push:
   commands:
     validate-branch:
       run: node scripts/validate-branch-name.cjs
+    typecheck:
+      run: npm run typecheck
     test:
       run: npm test

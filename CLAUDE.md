@@ -6,7 +6,7 @@ Project-specific instructions and conventions for working with the branch-valida
 
 This repository contains:
 - **SKILL.md** — Claude Code skill for branch name validation
-- **branch-validation.agent.md** — Agent role for comprehensive guidance
+- **agents/branch-validation.md** — Agent role; install it to `~/.claude/agents/` (see `agents/README.md`)
 - **Canonical file references** — Synced from lightspeedwp/.github
 - **Documentation** — Implementation patterns and integration guides
 
@@ -16,18 +16,24 @@ This repository contains:
 
 ```bash
 # Clone or open
-git clone https://github.com/lightspeedwp/branch-validation.git
-cd branch-validation
-
-# Or in Claude Code
-/project https://github.com/lightspeedwp/branch-validation
+git clone https://github.com/lightspeedwp/ls-wp-branches.git ~/.claude/skills/branch-validation-wordpress
+cd ~/.claude/skills/branch-validation-wordpress
+npm install
 ```
+
+### Scripting standards (this repository's own tooling)
+
+- Never add shell scripts (`.sh`) or BATS tests. Write tooling in TypeScript and run it with `tsx`.
+- Every script has Vitest tests in a `__tests__/` folder beside it. `npm test` enforces at least 80% statements, branches, functions and lines through the thresholds in `vitest.config.ts`.
+- Keep side effects (network, file system, git) behind injectable collaborators so tests never touch the network or real files.
+- Run `npm test` and `npm run typecheck` before handing work over.
+- The synced `scripts/validate-branch-name.cjs` is exempt: it is an unmodified copy from lightspeedwp/.github, and its TypeScript conversion is tracked upstream in GIT-2750.
 
 ### Before Starting Work
 
 1. **Sync canonical files** (if they may have changed):
    ```bash
-   ./scripts/sync-canonical.sh
+   npm run sync
    git status
    ```
 
@@ -66,11 +72,10 @@ cd branch-validation
   - Integration patterns
   - **When to edit:** When agent capabilities change
 
-- **branch-validation.agent.md** — Full agent role definition
-  - Detailed agent instructions
-  - Knowledge base (38 types)
-  - Interaction patterns and examples
-  - **When to edit:** When strategy or types change
+- **agents/branch-validation.md** — Agent role definition
+  - Preloads this skill and sets the agent's working rules
+  - Claude Code does not load it from this folder; symlink or copy it to `~/.claude/agents/`
+  - **When to edit:** When the agent's behaviour or boundaries change
 
 ### Documentation
 
@@ -94,13 +99,13 @@ cd branch-validation
   - 38 branch types
   - PR template routing
   - Examples
-  - **Don't edit directly:** Sync with `./scripts/sync-canonical.sh`
+  - **Don't edit directly:** Sync with `npm run sync`
 
 - **references/branch-labels.yml** — Synced from .github
   - Type-to-label mapping
   - Area keyword detection
   - Default labels per type
-  - **Don't edit directly:** Sync with `./scripts/sync-canonical.sh`
+  - **Don't edit directly:** Sync with `npm run sync`
 
 ### Prompts
 
@@ -134,7 +139,7 @@ git push -u origin docs/update-section
 
 ```bash
 # When .github files change
-./scripts/sync-canonical.sh
+npm run sync
 
 # Review changes
 git status
@@ -158,7 +163,7 @@ This is rare and requires coordination:
 
 2. **In branch-validation:**
    ```bash
-   ./scripts/sync-canonical.sh
+   npm run sync
    ```
 
 3. **Update documentation:**
@@ -176,13 +181,11 @@ This is rare and requires coordination:
 ### Task 4: Update Agent Role
 
 ```bash
-# Edit ~/.claude/agents/branch-validation.agent.md
-# Update capabilities, knowledge, or patterns
-
-# Then update this repo to reflect changes
-# (e.g., if agent knowledge is now different)
-git add docs/
-git commit -m "docs: update to match agent role changes"
+# Edit agents/branch-validation.md in this repository.
+# If it is installed as a symlink, ~/.claude/agents/branch-validation.md
+# picks up the change immediately.
+git add agents/
+git commit -m "docs(agents): update branch-validation agent role"
 git push
 ```
 
@@ -297,7 +300,7 @@ If adding automated sync or validation:
 ### Canonical Files Out of Sync
 
 ```bash
-./scripts/sync-canonical.sh
+npm run sync
 git diff references/
 # Review and commit
 ```
@@ -348,9 +351,9 @@ If any file grows significantly:
 ## Questions or Issues?
 
 1. **Strategy questions:** Check BRANCHING_STRATEGY.md in .github
-2. **Agent capability questions:** See branch-validation.agent.md
+2. **Agent capability questions:** See agents/branch-validation.md
 3. **Integration questions:** See docs/IMPLEMENTATION.md
-4. **File sync issues:** Run `./scripts/sync-canonical.sh`
+4. **File sync issues:** Run `npm run sync`
 5. **Contribution questions:** Check CONTRIBUTING.md in your repo
 
 ## Last Updated

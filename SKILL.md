@@ -125,6 +125,16 @@ feat(block-hero): add parallax scroll effect
 Closes TSP-27
 ```
 
+## What to read for each task
+
+| Task | Where |
+| --- | --- |
+| Choose and validate a new branch name | Steps 1 to 3 above |
+| Rename or fix a branch with the wrong name | [Fixing a branch that already has the wrong name](#fixing-a-branch-that-already-has-the-wrong-name) |
+| Plan a release or hotfix branch | Step 4 above, then [references/release.md](references/release.md) |
+| Refresh the synced rules and validator | [Keeping this skill in sync](#keeping-this-skill-in-sync) |
+| Block theme or block plugin workflow | [references/themes.md](references/themes.md), [references/plugins.md](references/plugins.md) |
+
 ## Reference guides
 
 Read these only when the task needs them:
@@ -142,4 +152,4 @@ These guides describe recommended practice. They do not describe CI that a given
 
 ## Keeping this skill in sync
 
-`scripts/validate-branch-name.cjs` and the files in `references/*.yml` are unmodified copies from `lightspeedwp/.github`. Do not edit them here. Run `scripts/sync-canonical.sh` to refresh them, then check the diff.
+`scripts/validate-branch-name.cjs` and the files in `references/*.yml` are unmodified copies from `lightspeedwp/.github`. Do not edit them here. Run `npm run sync` (or `npx tsx scripts/sync-canonical.ts`) in this skill's folder to refresh them, then check the diff. `npm run sync:check` reports drift without writing anything.

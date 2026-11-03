@@ -2,13 +2,15 @@
   "name": "branch-validation",
   "version": "1.0.0",
   "description": "Claude Code skill for choosing and validating branch names against LightSpeed WP's org-wide branching strategy",
+  "type": "module",
   "main": "SKILL.md",
   "scripts": {
-    "test": "node --test scripts/__tests__/*.test.cjs",
-    "test:bats": "bats tests/*.bats",
-    "test:all": "npm test && npm run test:bats",
+    "test": "vitest run --coverage",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
     "validate:branch-name": "node scripts/validate-branch-name.cjs",
-    "sync": "bash scripts/sync-canonical.sh"
+    "sync": "tsx scripts/sync-canonical.ts",
+    "sync:check": "tsx scripts/sync-canonical.ts --check"
   },
   "keywords": [
     "branch-validation",
@@ -21,10 +23,15 @@
   "author": "LightSpeed WP Team",
   "license": "Apache-2.0",
   "devDependencies": {
-    "lefthook": "^2.2.2"
+    "@types/node": "^24.19.2",
+    "@vitest/coverage-v8": "^5.1.0",
+    "lefthook": "^2.2.2",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vitest": "^5.1.0"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": "^22.12.0 || ^24.0.0 || >=26.0.0"
   },
   "repository": {
     "type": "git",

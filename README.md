@@ -151,11 +151,11 @@ branch-validation-wordpress/
 │
 ├── scripts/                          # Validation and automation scripts
 │   ├── validate-branch-name.cjs      # Synced from lightspeedwp/.github; do not edit
-│   ├── sync-canonical.sh             # Refreshes the synced files
-│   └── __tests__/                    # node:test checks of the SKILL.md examples
+│   ├── sync-canonical.ts             # Refreshes the synced files (npm run sync)
+│   └── __tests__/                    # Vitest suites (npm test, 80% coverage enforced)
 │
-└── tests/                            # Test suites
-    └── (BATS integration tests)
+├── vitest.config.ts                  # Test and coverage configuration
+└── tsconfig.json                     # Type checking (npm run typecheck)
 ```
 
 ## Key Concepts
