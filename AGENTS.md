@@ -4,7 +4,7 @@ This document defines agent roles that work with the `branch-validation-wordpres
 
 ## WordPress Block Branching Agent
 
-**Location:** `~/.claude/agents/wordpress-block-branching.md`
+**Location:** source at `agents/branch-validation.md` in this repository; install it to `~/.claude/agents/branch-validation.md` (see `agents/README.md`). Claude Code does not load agents from inside a skill folder.
 
 **Purpose:** Autonomous agent for WordPress block development workflows, providing expert guidance on branch strategy, naming conventions, and CI/CD integration specific to block themes and plugins.
 

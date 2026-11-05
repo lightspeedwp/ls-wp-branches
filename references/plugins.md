@@ -1,9 +1,3 @@
----
-name: branch-validation-wordpress-plugins
-description: WordPress block plugin development workflow with branching strategy, testing patterns, and WordPress.org deployment. Use this skill whenever developing blocks as standalone plugins, creating plugin-specific branching patterns, coordinating plugin testing (PHPUnit, Jest, Playwright), managing plugin settings and registration, or planning plugin releases for WordPress.org.
-compatibility: WordPress 5.0+, block plugins, @wordpress/scripts, PHP 7.4+, Node.js 16+
----
-
 # WordPress Block Plugin Development Skill
 
 Complete workflow for developing, testing, and releasing blocks as WordPress plugins.
@@ -246,5 +240,5 @@ npm run build            # Build for release
 ## Support
 
 For complex branch strategy → Use main `branch-validation-wordpress` skill
-For testing guidance → Use `branch-validation-wordpress-testing` skill
-For release coordination → Use `branch-validation-wordpress-release` skill
+For testing guidance → Use [references/testing.md](testing.md)
+For release coordination → Use [references/release.md](release.md)

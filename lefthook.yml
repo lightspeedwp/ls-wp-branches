@@ -1,88 +1,11 @@
-# Lefthook configuration for WordPress block validation
-# Based on LightSpeed WP hooks standards
-# Install: npm install lefthook --save-dev
-# Setup: npx lefthook install
+# Lefthook configuration for this skill's own repository.
+# Install: npm install && npx lefthook install
 
-version: 2
-min_version: 1.5.4
-
-# Commit hooks - run before git commit
-commit-msg:
-  parallel: false
-  commands:
-    validate-commit-message:
-      glob: ""
-      run: node scripts/validate-branch-name.js
-      stage_fixed: false
-
-pre-commit:
-  parallel: true
-  commands:
-    lint:
-      glob: "**/*.{js,jsx,json,md}"
-      run: npm run lint
-      stage_fixed: true
-
-    format:
-      glob: "**/*.{js,jsx,css,scss,md}"
-      run: npm run format
-      stage_fixed: true
-
-# Push hooks - run before git push
 pre-push:
-  parallel: false
   commands:
     validate-branch:
-      run: |
-        BRANCH=$(git rev-parse --abbrev-ref HEAD)
-        if [ "$BRANCH" != "main" ] && [ "$BRANCH" != "develop" ] && [ "$BRANCH" != "master" ]; then
-          node scripts/validate-branch-name.js --branch "$BRANCH" || exit 1
-        fi
-      stage_fixed: false
-
+      run: node scripts/validate-branch-name.cjs
+    typecheck:
+      run: npm run typecheck
     test:
-      run: npm run test
-      stage_fixed: false
-
-    test-e2e:
-      run: npm run test:e2e || true
-      stage_fixed: false
-
-# Prepare commit message hook - run when preparing commit
-prepare-commit-msg:
-  commands:
-    add-branch-name:
-      glob: ""
-      run: |
-        BRANCH=$(git rev-parse --abbrev-ref HEAD)
-        if [[ "$BRANCH" =~ ^(feat|fix|hotfix|release|refactor|test|ci|docs|a11y|perf|security)/ ]]; then
-          BRANCH_NAME=$(echo "$BRANCH" | sed 's/[^-]*-//g' | sed 's/-/ /g')
-          if ! grep -qF -- "$BRANCH_NAME" "$1"; then
-            sed -i.bak '1s/^/\n/' "$1"
-            BRANCH_NAME_SAFE=$(printf '%s\n' "$BRANCH_NAME" | sed -e 's/[\/&]/\\&/g')
-            sed -i.bak "1s/^/$BRANCH_NAME_SAFE/" "$1"
-            rm -f "$1.bak"
-          fi
-        fi
-      stage_fixed: false
-
-# Post merge hook - run after merge
-post-merge:
-  parallel: false
-  commands:
-    install-deps:
-      run: |
-        if git diff --name-only HEAD@{1} | grep -E "(package\.json|package-lock\.json)" > /dev/null; then
-          npm install
-        fi
-      stage_fixed: false
-
-# Custom skip conditions
-skip:
-  - merge
-  - rebase
-  - amend
-
-# Environment variables for hooks
-env:
-  PATH: $PATH:./node_modules/.bin
+      run: npm test

@@ -1,9 +1,3 @@
----
-name: branch-validation-wordpress-architecture
-description: Architecture and component design guidance for WordPress blocks. Use this when planning block structure, choosing between functional and class components, organizing block logic with hooks, designing composable block patterns, or reviewing block architecture for maintainability and reusability. Covers component patterns, hook organization, composition strategies, and scalable block design.
-compatibility: WordPress 5.0+, React/JSX for block editor
----
-
 # WordPress Block Architecture
 
 Design patterns, component structures, and architectural guidance for maintainable, reusable WordPress blocks.
@@ -369,8 +363,8 @@ test('block responds to attribute changes', async ({ page }) => {
 
 ## Resources
 
-- **Block Composition:** See `branch-validation-wordpress-plugins` for plugin-specific composition patterns
-- **Performance Optimization:** See `branch-validation-wordpress-testing` for performance testing
+- **Block Composition:** See [references/plugins.md](plugins.md) for plugin-specific composition patterns
+- **Performance Optimization:** See [references/testing.md](testing.md) for performance testing
 - **Real Examples:** Check the gallery, carousel, and accordion blocks in your theme for reference implementations
 
 ## Quick Checklist

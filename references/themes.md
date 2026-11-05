@@ -1,9 +1,3 @@
----
-name: branch-validation-wordpress-themes
-description: WordPress block theme development workflow with branching strategy, testing patterns, and release management. Use this skill whenever developing blocks for WordPress block themes, creating theme-specific branching patterns, coordinating theme testing strategies (Jest unit tests, Playwright E2E, WCAG 2.2 AAA accessibility, visual regression), managing theme.json configuration, or planning theme releases. Combines branch validation with complete theme development guidance.
-compatibility: WordPress 5.0+, block themes, @wordpress/scripts, Node.js 16+
----
-
 # WordPress Block Theme Development Skill
 
 Complete workflow guidance for developing, validating, and releasing blocks in WordPress themes.
@@ -199,5 +193,5 @@ npm run build           # Build for release
 ## Support
 
 For complex branch strategy questions → Use main `branch-validation-wordpress` skill
-For testing strategy → Use `branch-validation-wordpress-testing` skill
-For release coordination → Use `branch-validation-wordpress-release` skill
+For testing strategy → Use [references/testing.md](testing.md)
+For release coordination → Use [references/release.md](release.md)

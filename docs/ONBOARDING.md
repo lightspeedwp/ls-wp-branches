@@ -245,7 +245,6 @@ npm run validate:branch-name -- --branch feat/block-hero-parallax
 
 # 2. Do all tests pass?
 npm run test
-npm run test:bats
 
 # 3. Is code clean?
 npm run lint

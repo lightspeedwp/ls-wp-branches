@@ -1,386 +1,155 @@
 ---
 name: branch-validation-wordpress
-description: Guides WordPress Gutenberg block development workflows: branch naming conventions, block testing strategies (unit, E2E, a11y), and release coordination. Use for block-specific branching decisions, test strategy, release management, or team onboarding to block development practices.
-compatibility: git, Node.js (for validation scripts), WordPress 5.0+
+description: Choose, check and fix Git branch names against the LightSpeed org branching strategy ({type}/{scope}-{title}), for WordPress block themes, block plugins and any other LightSpeed repository. Use it before creating or renaming a branch, when a branch-name check fails locally or in CI, when Linear or Spec Kit suggests a branch name, when picking the branch type for a piece of work, or when planning a release or hotfix branch. Also has reference guides for block themes, block plugins, block testing, accessibility, security and releases.
+compatibility: git, Node.js 18+ (the validator has no npm dependencies)
 ---
 
-# Branch Validation for WordPress Block Development
+# Branch validation for WordPress projects
 
-Comprehensive branch naming validation, strategy guidance, and workflow coordination for WordPress block themes and block plugins.
+Every LightSpeed repository names branches the same way, so labels, PR templates and project fields can be set from the branch name. The rules come from the org strategy in [lightspeedwp/.github `docs/BRANCHING_STRATEGY.md`](https://github.com/lightspeedwp/.github/blob/develop/docs/BRANCHING_STRATEGY.md). This skill applies them; it does not add rules of its own.
 
-## Purpose
+## The pattern
 
-This skill ensures your WordPress block project maintains consistent branch naming, follows LightSpeed WP's org-wide strategy, and properly coordinates development workflows for both block themes and block plugins.
-
-## When to Use This Skill
-
-**Branch Creation & Naming**
-- Creating a new branch for a WordPress block theme or plugin feature
-- Renaming an existing branch
-- Validating branch names before pushing to remote
-- Understanding which branch type to use for your work
-
-**WordPress Block Development**
-- Adding new blocks to a theme or plugin
-- Implementing block variations and patterns
-- Fixing block-related bugs (rendering, performance, accessibility)
-- Testing block functionality across WordPress versions
-- Managing block versions and compatibility
-
-**Release & Version Management**
-- Planning a block theme or plugin release
-- Versioning blocks independently or with the theme/plugin
-- Understanding semantic versioning for block components
-- Creating release branches for block updates
-
-**Automation & CI/CD**
-- Setting up automated validation in CI/CD pipelines
-- Configuring block-specific testing strategies
-- Managing changelog entries for block changes
-- Automating block deployment workflows
-
-**Team Strategy & Governance**
-- Onboarding new team members to the branching strategy
-- Reviewing block development workflow
-- Understanding automation governance
-- Learning support procedures and troubleshooting
-
-## Branch Types for WordPress Block Development
-
-### Block Feature Development (6 types)
-
-**`feat/block-{component}-{feature}`** — New block or block feature
-- New custom block type
-- New block variation
-- New reusable pattern
-- Block template parts
-
-Examples:
-- `feat/block-hero-section-parallax`
-- `feat/block-testimonial-carousel`
-- `feat/block-pricing-table`
-
-**`feat/block-{component}-accessibility`** — Block accessibility improvements
-- WCAG 2.2 AAA compliance
-- Screen reader enhancements
-- Keyboard navigation
-- ARIA labels and descriptions
-
-Examples:
-- `feat/block-gallery-a11y-focus-management`
-- `feat/block-form-input-a11y-labels`
-
-**`perf/block-{component}-{optimization}`** — Block performance
-- Block render performance
-- Block save/edit performance
-- Reduced block size/dependencies
-- Optimized block assets
-
-Examples:
-- `perf/block-slider-lazy-loading`
-- `perf/block-animation-reduce-repaints`
-
-**`feat/block-patterns-{category}`** — Block pattern collections
-- New pattern category
-- Pattern library expansion
-- Pattern documentation
-
-Examples:
-- `feat/block-patterns-landing-pages`
-- `feat/block-patterns-product-showcase`
-
-**`research/block-{topic}`** — Block research & exploration
-- Proof of concept for new block type
-- Technology research for block enhancement
-- Block API exploration
-- Browser compatibility research
-
-Examples:
-- `research/block-interactivity-api`
-- `research/block-view-transitions`
-
-### Block Bug Fixes (3 types)
-
-**`fix/block-{component}-{issue}`** — Block bug fix
-- Block rendering bug
-- Block edit mode issue
-- Block save/migration issue
-- Block validation error
-
-Examples:
-- `fix/block-button-color-contrast-wcag`
-- `fix/block-list-nesting-save-error`
-
-**`security/block-{component}-{vulnerability}`** — Block security fix
-- XSS vulnerability in block
-- Sanitization issue
-- Permission bypass
-- Script injection prevention
-
-Examples:
-- `security/block-html-xss-sanitization`
-- `security/block-custom-html-escaping`
-
-**`a11y/block-{component}-{issue}`** — Block accessibility bug fix
-- WCAG violation fix
-- Screen reader issue
-- Keyboard navigation fix
-- Focus management bug
-
-Examples:
-- `a11y/block-image-alt-text-validation`
-- `a11y/block-accordion-keyboard-navigation`
-
-### Infrastructure & Testing (4 types)
-
-**`test/block-{component}-{test-type}`** — Block testing
-- E2E tests for block
-- Unit tests for block logic
-- Visual regression tests
-- Accessibility tests (a11y)
-
-Examples:
-- `test/block-gallery-e2e-carousel`
-- `test/block-form-validation-unit`
-
-**`ci/block-{tool}-{improvement}`** — CI/CD for blocks
-- Block testing automation
-- Block linting setup
-- Block bundle size checks
-- Block visual diff checks
-
-Examples:
-- `ci/block-e2e-testing-setup`
-- `ci/block-bundle-size-monitoring`
-
-**`refactor/block-{component}-{improvement}`** — Block refactoring
-- Block code organization
-- Block component structure
-- Block API modernization
-- Reduce block complexity
-
-Examples:
-- `refactor/block-tabs-component-composition`
-- `refactor/block-form-hook-extraction`
-
-**`docs/block-{component}-{documentation}`** — Block documentation
-- Block usage documentation
-- Block API documentation
-- Block pattern documentation
-- Block developer guide
-
-Examples:
-- `docs/block-carousel-usage-guide`
-- `docs/block-api-migration-guide`
-
-### Release & Versioning (2 types)
-
-**`release/block-v{version}`** — Block version release
-- Block feature release
-- Block version bump
-- Block changelog update
-
-Examples:
-- `release/block-v2-0-0`
-- `release/block-hero-v1-5-0`
-
-**`hotfix/block-{component}-{urgency}`** — Urgent block fix
-- Critical block bug in production
-- Security hotfix for block
-- Regression blocking users
-
-Examples:
-- `hotfix/block-image-responsive-regression`
-- `hotfix/block-form-submission-critical`
-
-## WordPress Block Considerations
-
-### Block Feature Development
-- All block code must follow WordPress Coding Standards
-- Blocks must include PHPUnit tests (if server-rendered)
-- JavaScript/JSX must have Jest tests (85%+ coverage)
-- E2E tests required for interactive blocks (Playwright)
-- Accessibility (WCAG 2.2 AAA) is mandatory
-
-### Block Type Patterns
-
-**Custom Blocks:**
-```
-feat/block-{blockname}-{feature}
+```text
+{type}/{scope}-{title}
 ```
 
-**Core Block Modifications:**
+- **type**: one of the allowed types below.
+- **scope**: what the work affects (an area, a block, or a Linear issue key).
+- **title**: a short description in the present tense.
+- Lowercase letters, numbers and single hyphens only. No underscores, dots, spaces, uppercase or double hyphens.
+- There must be at least one hyphen after the slash, so `fix/header` fails and `fix/header-sticky-overlap` passes.
+- Release branches may also use a version: `release/v1.2.0`, `release/1.2.0`, or the standard form, such as `release/go-live-2026-12-01`.
+
+`main` and `develop` are exempt, as are `dependabot/` and `renovate/` branches. Any other name, including `master` and `staging`, must match the pattern.
+
+### Forbidden prefixes
+
+Never create `claude/`, `copilot/` or `openai/` branches, even when a tool suggests one. CI rejects them. Name the branch for the work instead.
+
+## Step 1: Choose the type
+
+| The work is... | Type |
+| --- | --- |
+| A new feature, block, pattern, template or capability | `feat` |
+| A bug fix | `fix` |
+| An urgent fix for production | `hotfix` |
+| Maintenance or tooling with no change in behaviour | `chore` |
+| Restructuring code with no change in behaviour | `refactor` |
+| Tests only | `test` (or `qa` for test harnesses and UAT scaffolding) |
+| Documentation only | `docs` |
+| Design tokens, design system or UI design changes | `design` (or `ds`, `ux`) |
+| An accessibility fix | `a11y` |
+| Performance | `perf` |
+| Security | `security` |
+| CI workflows | `ci`; bundling and build tooling: `build` |
+| Dependency updates | `deps` |
+| Content edits, redirects or IA | `content` |
+| SEO, metadata, schema markup or sitemaps | `seo` |
+| Site or plugin configuration | `config` |
+| Data or content migration | `migrate` |
+| A time-boxed spike | `research`; a prototype: `proto` |
+| A release | `release` |
+
+All 38 allowed types: `feat`, `fix`, `hotfix`, `release`, `refactor`, `chore`, `task`, `doc`, `docs`, `test`, `perf`, `ci`, `build`, `deps`, `security`, `revert`, `research`, `design`, `a11y`, `ux`, `i18n`, `ops`, `proto`, `ds`, `api`, `schema`, `telemetry`, `content`, `seo`, `config`, `migrate`, `qa`, `uat`, `audit`, `codex`, `aiops`, `automation`, `epic`. Descriptions and PR template routing are in [references/branch-types.yml](references/branch-types.yml).
+
+## Step 2: Build the name
+
+Pick the scope that makes the branch easiest to recognise:
+
+| Situation | Scope | Example |
+| --- | --- | --- |
+| Work tracked in Linear | The issue key, lowercased | `feat/tsp-27-hero-layout` |
+| A custom block | `block-{name}` | `feat/block-hero-parallax-scroll` |
+| A core block style or variation | `block-core-{name}` | `feat/block-core-button-outline-style` |
+| Block patterns | `block-patterns-{category}` | `feat/block-patterns-landing-pages` |
+| A theme area | The area | `fix/header-sticky-overlap`, `design/tokens-spacing-scale` |
+
+The `block-` scopes are a convention for readability. The validator does not require them.
+
+Names suggested by other tools often fail, so convert them:
+
+| Suggested | Problem | Use |
+| --- | --- | --- |
+| `feature/tsp-27-hero-layout` (Linear's default) | `feature` is not a type | `feat/tsp-27-hero-layout` |
+| `zared/tsp-27-hero-layout` (Linear with a user prefix) | No type | `feat/tsp-27-hero-layout` |
+| `001-concierge-hero` (Spec Kit's default) | No type | `feat/concierge-hero-section`, passed explicitly to Spec Kit |
+| `claude/fix-header` | Forbidden prefix | `fix/header-sticky-overlap` |
+| `feat/Hero_Block` | Uppercase and underscore | `feat/block-hero-layout` |
+
+## Step 3: Validate before creating the branch
+
+Use the repository's own copy of the validator when it has one, because that is the copy its CI runs:
+
+```bash
+node scripts/validation/validate-branch-name.cjs --branch <name>
 ```
-feat/block-core-{blockname}-{feature}
+
+If the repository has no copy, use the one bundled with this skill:
+
+```bash
+node "${CLAUDE_SKILL_DIR}/scripts/validate-branch-name.cjs" --branch <name>
 ```
 
-**Block Patterns:**
-```
-feat/block-patterns-{category}
-```
+Exit code `0` means the name is valid. Exit code `1` means it is invalid, and the reason is printed. Without `--branch`, the script checks the current branch, reading `BRANCH_NAME`, `GITHUB_HEAD_REF` or `GITHUB_REF_NAME` before asking Git. `--show-pattern` prints the exact regular expressions.
 
-**Block Variations:**
-```
-feat/block-{blockname}-variation-{type}
-```
+Validate the name before running `git checkout -b`, not after. When you propose a branch to the user, show the name and the validator result together.
 
-### Version Pinning
+## Step 4: Branch from the right place
 
-Blocks should specify minimum WordPress version:
-```
-"version": "1.2.0",
-"requires": "6.0",
-"requires_php": "7.4"
-```
+| Branch | From | PR into |
+| --- | --- | --- |
+| Most work (`feat`, `fix`, `docs`, `chore`, ...) | `develop` if the repository has it, otherwise `main` | The same branch |
+| `release/...` | `develop` | `main`, then tag the release |
+| `hotfix/...` | `main` | `main`, then merge back into `develop` |
 
-### Testing Requirements by Block Type
+Keep branches short-lived and small. PRs are squash-merged, so the PR title becomes the commit on the target branch, and the branch is deleted after merging. Commit, push and open PRs only when the user asks; follow their instructions on who reviews.
 
-**Interactive Blocks:** E2E + Unit + A11y + Visual tests
-**Display Blocks:** Visual + A11y tests minimum
-**Container Blocks:** E2E + A11y + Nesting tests
-**Pattern Blocks:** Template + A11y tests
+## Fixing a branch that already has the wrong name
 
-## Branch Naming Examples
-
-### ✅ Valid WordPress Block Branches
-
-```
-feat/block-hero-parallax-scroll
-feat/block-header-responsive-layout
-feat/block-navigation-submenu-support
-feat/block-testimonial-carousel
-feat/block-form-multi-step-validation
-fix/block-button-color-wcag
-fix/block-navigation-mobile-menu-toggle
-perf/block-gallery-lazy-loading
-perf/block-header-render-optimization
-a11y/block-form-keyboard-nav
-a11y/block-navigation-keyboard-navigation
-a11y/block-header-color-contrast
-test/block-slider-e2e-carousel
-test/block-navigation-accessibility-audit
-test/block-header-responsive-testing
-docs/block-api-migration-guide
-docs/block-header-usage-guide
-release/block-v2-0-0
-hotfix/block-image-responsive-regression
-hotfix/block-navigation-mobile-critical
-feat/block-patterns-landing-pages
+```bash
+git branch -m <old-name> <new-name>          # rename locally
+git push origin -u <new-name>                # only when the user asks to push
+git push origin --delete <old-name>          # only when the user confirms
 ```
 
-### ❌ Invalid Branches
+An open PR cannot change its head branch. After renaming, open a new PR from the new branch and close the old one.
 
-```
-feat/add-new-block              # Too vague, missing component
-feature/button-block            # Wrong type (use feat)
-fix_button_block_color          # Underscores, not hyphens
-HOTFIX/BLOCK-IMAGE-CRITICAL     # Uppercase not allowed
-block/hero/parallax             # Wrong delimiter (use hyphens)
-```
+## Commit messages
 
-## Commit Message Format
+Use Conventional Commits, with the scope matching the branch where it helps:
 
-Follow the standard format with block context:
-
-```
+```text
 feat(block-hero): add parallax scroll effect
 
-- Implement parallax effect using Intersection Observer
-- Add accessibility support with prefers-reduced-motion
-- Include E2E tests for parallax behavior
-- Update CHANGELOG.md
-
-Closes #123
+Closes TSP-27
 ```
 
-## CI/CD Integration
+## What to read for each task
 
-### GitHub Actions Workflow
+| Task | Where |
+| --- | --- |
+| Choose and validate a new branch name | Steps 1 to 3 above |
+| Rename or fix a branch with the wrong name | [Fixing a branch that already has the wrong name](#fixing-a-branch-that-already-has-the-wrong-name) |
+| Plan a release or hotfix branch | Step 4 above, then [references/release.md](references/release.md) |
+| Refresh the synced rules and validator | [Keeping this skill in sync](#keeping-this-skill-in-sync) |
+| Block theme or block plugin workflow | [references/themes.md](references/themes.md), [references/plugins.md](references/plugins.md) |
 
-Branches automatically trigger:
-- WordPress Coding Standards checks (PHP)
-- ESLint for JavaScript/JSX
-- Jest tests (JavaScript, >85% coverage)
-- PHPUnit tests (PHP, if applicable)
-- Playwright E2E tests (interactive blocks)
-- WCAG 2.2 AAA accessibility audit
-- Bundle size monitoring
+## Reference guides
 
-### Branch Protection Rules
+Read these only when the task needs them:
 
-- `develop` and `main`: Require passing CI, 1 approval
-- Block feature branches: Auto-label with `area:blocks`
-- Block hotfix branches: Auto-labeled `priority:critical`
+- [references/themes.md](references/themes.md): block theme workflow (structure, `theme.json`, templates, patterns).
+- [references/plugins.md](references/plugins.md): block plugin workflow (registration, settings, WordPress.org).
+- [references/architecture.md](references/architecture.md): block component and hook design.
+- [references/testing.md](references/testing.md): Jest, PHPUnit and Playwright strategy by block type.
+- [references/accessibility.md](references/accessibility.md): WCAG 2.2 keyboard, focus, ARIA and contrast checks.
+- [references/security.md](references/security.md): sanitising, escaping, nonces and capability checks in blocks.
+- [references/release.md](references/release.md): semantic versioning, changelogs, release and hotfix flow.
+- [references/branch-types.yml](references/branch-types.yml) and [references/branch-labels.yml](references/branch-labels.yml): canonical type, template and label maps.
 
-## Release Process
+These guides describe recommended practice. They do not describe CI that a given repository runs: check the repository's `.github/workflows/` before saying a check will run.
 
-### Minor/Feature Release
+## Keeping this skill in sync
 
-1. Create `release/block-v{version}` from `develop`
-2. Update version in `block.json`, `package.json`
-3. Update `CHANGELOG.md` with new features
-4. CI runs full test suite
-5. Merge to `main` with tag `block-v{version}`
-6. Deploy to WordPress.org (if plugin)
-
-### Hotfix Process
-
-1. Create `hotfix/block-{issue}` from `main`
-2. Fix the issue (minimal change)
-3. Bump patch version
-4. Update `CHANGELOG.md`
-5. Merge to `main`, tag as `block-v{patch}`
-6. Back-merge to `develop`
-
-## Quick Reference: Branch Naming Checklist
-
-✅ Use lowercase letters and hyphens only  
-✅ Start with a valid type: `feat`, `fix`, `perf`, `a11y`, `security`, `test`, `ci`, `refactor`, `docs`, `release`, `hotfix`  
-✅ Include `block-` prefix for all block-related work  
-✅ Follow format: `{type}/block-{component}-{description}`  
-✅ Validate before pushing: `node scripts/validate-branch-name.js your-branch-name`
-
-## Common Workflows
-
-### Adding a New Block
-
-```
-1. Create: git checkout -b feat/block-{name}-{feature}
-2. Develop: Add block code + tests (Jest 85%+ coverage, Playwright E2E, WCAG 2.2 AAA)
-3. Commit: feat(block-{name}): add {feature}
-4. Push: git push -u origin feat/block-{name}-{feature}
-5. PR: Automatically labeled, runs full CI suite and accessibility audit
-```
-
-### Fixing a Block Bug
-
-```
-1. Create: git checkout -b fix/block-{name}-{issue}
-2. Fix: Make minimal, focused change only
-3. Test: Add regression tests
-4. Commit: fix(block-{name}): {description}
-5. PR: Auto-labeled type:bug, area:blocks
-```
-
-### Releasing a Block
-
-```
-1. Create: git checkout -b release/block-v{major}-{minor}-{patch}
-2. Prepare: Update version in block.json, package.json, and CHANGELOG.md
-3. Test: Full CI suite runs automatically
-4. Merge: Squash to main, create tag block-v{version}
-5. Deploy: Automatic to WordPress.org (if plugin) or theme directory
-```
-
-## Documentation
-
-**For full details on:**
-- Block theme development → Load `branch-validation-wordpress-themes` sub-skill
-- Block plugin development → Load `branch-validation-wordpress-plugins` sub-skill
-- Block architecture & component design → Load `branch-validation-wordpress-architecture` sub-skill
-- Security hardening & vulnerability prevention → Load `branch-validation-wordpress-security` sub-skill
-- Accessibility (WCAG 2.2 AAA) & inclusive design → Load `branch-validation-wordpress-accessibility` sub-skill
-- Testing strategies (Jest, Playwright, accessibility) → Load `branch-validation-wordpress-testing` sub-skill
-- Release management and versioning → Load `branch-validation-wordpress-release` sub-skill
-
-See the main skill repository for complete guides: https://github.com/lightspeedwp/branch-validation
+`scripts/validate-branch-name.cjs` and the files in `references/*.yml` are unmodified copies from `lightspeedwp/.github`. Do not edit them here. Run `npm run sync` (or `npx tsx scripts/sync-canonical.ts`) in this skill's folder to refresh them, then check the diff. `npm run sync:check` reports drift without writing anything.

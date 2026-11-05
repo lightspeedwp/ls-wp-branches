@@ -20,7 +20,7 @@ branch-validation/
 │   └── CANONICAL_STRUCTURE.md        ← This file
 │
 ├── scripts/
-│   └── sync-canonical.sh             ← Fetch latest canonical files
+│   └── sync-canonical.ts             ← Fetch latest canonical files (npm run sync)
 │
 └── .github/ (repository settings)
     ├── BRANCHING_STRATEGY.md         ← (referenced, not copied)
@@ -153,7 +153,7 @@ security:
 
 ```bash
 cd branch-validation
-./scripts/sync-canonical.sh
+npm run sync
 
 # Review changes
 git diff references/
@@ -184,9 +184,13 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: main
-      
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
       - name: Sync canonical files
-        run: ./scripts/sync-canonical.sh
+        run: npm install && npm run sync
       
       - name: Create pull request
         if: github.event_name != 'schedule' || failure() == false
@@ -256,7 +260,7 @@ If canonical files change in a way that affects the skill:
 Example:
 
 ```bash
-./scripts/sync-canonical.sh
+npm run sync
 # branch-types.yml now has: foobar: ...
 
 # Edit SKILL.md to add foobar to the type list
@@ -279,7 +283,7 @@ git commit -m "feat: add new branch type 'foobar'"
 Example:
 
 ```bash
-./scripts/sync-canonical.sh
+npm run sync
 # branch-types.yml no longer has: deprecated_type: ...
 
 # Edit SKILL.md to remove the type
